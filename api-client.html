@@ -1,0 +1,197 @@
+<script type="text/javascript">
+    function updateFieldStates(envData) {
+        const showDevOnly = $(".show-dev-only");
+        const hideDevOnly = $(".hide-dev-only");
+        const enableDevOnly = $(".enable-dev-only");
+        const disableDevOnly = $(".disable-dev-only");
+
+        if (envData?.NODE_ENV==="dev") {
+            showDevOnly.prop('hidden', false)
+            hideDevOnly.prop('hidden', true)
+            enableDevOnly.prop('disabled', false)
+                .css({
+                    'background-color': '',
+                    'color': '',
+                    'cursor': ''
+            });
+            disableDevOnly.prop('disabled', true)
+                .css({
+                    'background-color': '#f0f0f0',
+                    'color': '#999',
+                    'cursor': 'not-allowed'
+            });
+        } else {
+            showDevOnly.prop('hidden', true)
+            hideDevOnly.prop('hidden', false)
+            enableDevOnly.prop('disabled', true)
+                .css({
+                    'background-color': '#f0f0f0',
+                    'color': '#999',
+                    'cursor': 'not-allowed'
+            });
+            disableDevOnly.prop('disabled', false)
+                .css({
+                    'background-color': '',
+                    'color': '',
+                    'cursor': ''
+            });
+            
+            $("#node-input-extraRespInfo").prop('checked', false);
+        }
+    }
+    
+    RED.nodes.registerType("api-client", {
+        category: "network",
+        color: "#449ECA",
+        defaults: {
+            name: { value: "" },
+            secretMgr: { value: "", type: "secret-manager", required: true },
+            method: { value: "GET" },
+            service: { value: "mes-api" },
+            // endpoint: { value: "" },
+            overridePayload: { value: false },
+            extraRespInfo: { value: false }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "pl_logo.png",
+        label: function () {
+            if(this?.name){ return this.name }
+            return `[${this.service}]`
+                    // : `[${this.service} ${this.environment} ${this.location}]`;
+        },
+        paletteLabel: "PL Client",
+        oneditprepare: function () {
+            $.getJSON('/node-env', function(resp) {
+                updateFieldStates(resp);
+            }).fail(function() {
+                console.warn('Could not check environment variables');
+            });
+
+            $("#node-input-service").typedInput({
+                types: [
+                    {
+                        value: "service",
+                        options: [
+                            { value: "mes-api", label: "MES"},
+                            { value: "im-es", label: "IM-ES"},
+                            { value: "ncis", label: "NCIS"},
+                            { value: "im-tool", label: "IM-TOOL"},
+                        ]
+                    }
+                ]
+            })
+            
+            // Set up method dropdown
+            $("#node-input-method").on("change", function () {
+                const method = $(this).val();
+                if (method === "POST") {
+                    $("#node-row-message-content").show();
+                } else {
+                    $("#node-row-message-content").hide();
+                }
+            });
+
+
+            // Initialize UI based on current method
+            $("#node-input-method").trigger("change");
+
+            $("#node-input-overridePayload").prop("checked", this.overridePayload !== false);
+            $("#node-input-extraRespInfo").prop("checked", this.extraRespInfo !== false);
+
+            // $("#node-input-example3").typedInput({
+            //     type:"msg",
+            //     // types:["msg", "flow","global"],
+            //     types:["msg"],
+            //     typeField: "#node-input-response-path"
+            // })
+        },
+        // oneditsave: function() {
+
+        // }
+    });
+</script>
+
+<script type="text/html" data-template-name="api-client">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+    <div class="form-row"><label for="node-input-secretMgr"><i class="fa fa-cog"></i> API Config</label>
+        <input type="text" id="node-input-secretMgr" />
+    </div>
+    <!-- <div class="form-row">
+        <label for="node-input-endpoint"><i class="fa fa-link"></i> Endpoint</label>
+        <input type="text" id="node-input-url" placeholder="/api/v1/activities"/>
+    </div> -->
+    <div class="form-row">
+        <label for="node-input-service"><i class="fa fa-cube"></i> Service</label>
+        <input type="text" id="node-input-service"/>
+    </div>
+    <div class="form-row">
+        <label for="node-input-method"><i class="fa fa-exchange"></i> Method</label>
+        <select id="node-input-method" disabled="true">
+            <option value="GET">GET</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label class="col-sm-8" style="width:70%" for="node-input-overridePayload"><i class="fa fa-exchange"></i> Override Payload</label>
+        <input class="col-sm float-left" style="width:auto" type="checkbox" id="node-input-overridePayload" checked/>
+    </div>
+    <div class="form-row enable-dev-only">
+        <label class="col-sm-8" for="node-input-extraRespInfo" style="width:70%"><i class="fa fa-search"></i> Verbose response info?</label>
+        <input class="col-sm-auto float-left" type="checkbox" id="node-input-extraRespInfo" style="width:auto;" unchecked />
+        <div class="form-tips hide-dev-only" id="extraRespInfo-note" style="margin-top: 5px; color: #666; font-size: 12px;">
+            <i class="fa fa-lock"></i> Option only available in Developer Mode
+        </div>
+    </div>
+    <!-- <div class="form-row" id="node-row-response-path">
+        <label for="node-input-response-path"><i class="fa fa-file"></i> Where to store response data?</label>
+        <input type="text" id="node-input-response-path">
+        <input type="hidden" id="node-input-response-path">
+    </div> -->
+    <div class="form-row" id="node-row-message-content">
+        <label for="node-input-messageContent"><i class="fa fa-file"></i> Default Content</label>
+        <input type="text" id="node-input-messageContent" placeholder='{"key": "value"}'/>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="api-client">
+    <p>
+        Makes API requests to company services using the configured credentials. Request parameters are gathered from the msg.request object and response data are stored in msg.response
+    </p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>
+            request.endpoint <span class="property-type">string</span>
+        </dt>
+        <dd>The endpoint to target with the request. The client node will configure the base url automatically from environment variables</dd>
+        <dt>
+            request.url <span class="property-type">string</span>
+        </dt>
+        <dd>Required if "request.endpoint" is not specified. When present, client will target this url verbatim</dd>
+        <dt class="optional">
+            request.method <span class="property-type">string</span>
+        </dt>
+        <dd>Override the request method (GET/POST)</dd>
+        <dt class="optional">
+            request.service <span class="property-type">string</span>
+        </dt>
+        <dd>Override the service name</dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>response.data <span class="property-type">object</span></dt>
+        <dd>The response data from the API</dd>
+        <dt>response.status <span class="property-type">number</span></dt>
+        <dd>The HTTP status code</dd>
+        <dt>response.statusText <span class="property-type">string</span></dt>
+        <dd>The HTTP response status text</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>
+        This node makes API requests to company services using the configured
+        credentials. You should specify the endpoint, and override the service/method 
+        by setting the corresponding properties in the msg.request object.
+    </p>
+</script>

@@ -1,0 +1,264 @@
+[
+    {
+        "id": "0209c4242a55af39",
+        "type": "tab",
+        "label": "Environment Test",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "5106e78a18331893",
+        "type": "inject",
+        "z": "0209c4242a55af39",
+        "name": "SIT request",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "a8ea5ed739729c02"
+            ]
+        ]
+    },
+    {
+        "id": "bbc52e987cbc062c",
+        "type": "debug",
+        "z": "0209c4242a55af39",
+        "name": "debug 24",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "a8ea5ed739729c02",
+        "type": "api-client",
+        "z": "0209c4242a55af39",
+        "name": "(mes) Get Activity",
+        "secretMgr": "b0625ec359b3ffae",
+        "service": "mes-api",
+        "endpoint": "/api/v1/Activities/12f50301-3019-4c7f-8b0e-7c5df011e57c",
+        "method": "GET",
+        "messageContent": "",
+        "x": 390,
+        "y": 120,
+        "wires": [
+            [
+                "bbc52e987cbc062c"
+            ]
+        ]
+    },
+    {
+        "id": "d4551b101dee8afd",
+        "type": "inject",
+        "z": "0209c4242a55af39",
+        "name": "STAGING request",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 200,
+        "wires": [
+            [
+                "d43ae868469f3182"
+            ]
+        ]
+    },
+    {
+        "id": "ede2987124d6ae66",
+        "type": "debug",
+        "z": "0209c4242a55af39",
+        "name": "debug 25",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "d43ae868469f3182",
+        "type": "api-client",
+        "z": "0209c4242a55af39",
+        "name": "(mes) Get Activity",
+        "secretMgr": "80282204a160a1eb",
+        "service": "mes-api",
+        "endpoint": "/api/v1/Activities/9e852ced-79ca-4277-911a-1c5f3eeeea77",
+        "method": "GET",
+        "messageContent": "",
+        "x": 390,
+        "y": 200,
+        "wires": [
+            [
+                "ede2987124d6ae66"
+            ]
+        ]
+    },
+    {
+        "id": "f1a37733c83a114e",
+        "type": "inject",
+        "z": "0209c4242a55af39",
+        "name": "PROD request",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 280,
+        "wires": [
+            [
+                "611b0ed96aca8734"
+            ]
+        ]
+    },
+    {
+        "id": "73a887b3bee10272",
+        "type": "debug",
+        "z": "0209c4242a55af39",
+        "name": "debug 26",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "611b0ed96aca8734",
+        "type": "api-client",
+        "z": "0209c4242a55af39",
+        "name": "(mes) Get Activity",
+        "secretMgr": "05c7612185ca1769",
+        "service": "mes-api",
+        "endpoint": "/api/v1/Activities/54c3cf0b-8c44-403f-83ed-ddbfbbfcea56",
+        "method": "GET",
+        "messageContent": "",
+        "x": 390,
+        "y": 280,
+        "wires": [
+            [
+                "73a887b3bee10272"
+            ]
+        ]
+    },
+    {
+        "id": "9cea72c2391d29ae",
+        "type": "catch",
+        "z": "0209c4242a55af39",
+        "name": "",
+        "scope": null,
+        "uncaught": false,
+        "x": 380,
+        "y": 380,
+        "wires": [
+            [
+                "58231f6d8de51831"
+            ]
+        ]
+    },
+    {
+        "id": "58231f6d8de51831",
+        "type": "debug",
+        "z": "0209c4242a55af39",
+        "name": "debug 27",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "a6087ca4d53d4318",
+        "type": "comment",
+        "z": "0209c4242a55af39",
+        "name": "Instructions!",
+        "info": "# Instructions\n 1. Ensure your env variables are set-up\n 2. Open the PL Client node next to the \"SIT request\" node\n 3. Create a new config node, and select SIT from the environment dropdown\n 4. Repeat for STAGING and PROD below",
+        "x": 90,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "b0625ec359b3ffae",
+        "type": "secret-manager",
+        "name": "test-sit",
+        "environment": "sit",
+        "location": "amer"
+    },
+    {
+        "id": "80282204a160a1eb",
+        "type": "secret-manager",
+        "name": "test-staging",
+        "environment": "staging",
+        "location": "amer"
+    },
+    {
+        "id": "05c7612185ca1769",
+        "type": "secret-manager",
+        "name": "test-prod",
+        "environment": "prod",
+        "location": "amer"
+    }
+]
