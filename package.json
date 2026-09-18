@@ -1,5 +1,5 @@
 {
-  "name": "nr-pl-client",
+  "name": "node-red-contrib-miranker",
   "version": "1.0.2",
   "description": "A module for Node-Red that provides an easy way to interact with",
   "homepage": "https://github.com/abgmiranker/node-red-contrib-miranker#readme",
@@ -28,6 +28,7 @@
   "author": "Alex Miranker",
   "type": "commonjs",
   "main": "secret-manager.js",
+  "keywords": ["node-red"],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }
