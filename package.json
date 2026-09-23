@@ -20,13 +20,13 @@
     "uuid": "^11.1.0"
   },
   "node-red": {
+    "version":">=4.1.0",
     "nodes": {
       "api-client": "api-client.js",
       "secret-manager": "secret-manager.js"
     }
   },
   "author": "Alex Miranker",
-  "type": "commonjs",
   "main": "secret-manager.js",
   "keywords": [
     "node-red"
